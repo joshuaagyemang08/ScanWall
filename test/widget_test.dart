@@ -14,6 +14,9 @@ void main() {
     await tester.pumpWidget(const ScanWallApp());
 
     expect(find.text('ScanWall'), findsOneWidget);
-    expect(find.text('Ready to scan'), findsOneWidget);
+    expect(
+      find.text('Point your camera at a QR code\nto browse wallpapers'),
+      findsOneWidget,
+    );
   });
 }
