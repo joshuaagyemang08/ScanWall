@@ -29,6 +29,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
       final success = await AsyncWallpaper.setWallpaper(
         url: widget.imageUrl,
         wallpaperLocation: location,
+        // Built-in toast messages on Android
         toastDetails: ToastDetails.success(),
         errorToastDetails: ToastDetails.error(),
       );
@@ -52,6 +53,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          // Full screen wallpaper preview
           Positioned.fill(
             child: Image.network(
               widget.imageUrl,
@@ -62,6 +64,8 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               },
             ),
           ),
+
+          // Dark overlay at the top for the back button
           Positioned(
             top: 0,
             left: 0,
@@ -94,6 +98,8 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               ),
             ),
           ),
+
+          // Buttons panel at the bottom
           Positioned(
             bottom: 0,
             left: 0,
@@ -110,6 +116,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Status message
                   if (_statusMessage.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16),
@@ -125,6 +132,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                   if (_isLoading)
                     const CircularProgressIndicator(color: Colors.white)
                   else ...[
+                    // Home screen button
                     _WallpaperButton(
                       label: 'Set Home Screen',
                       icon: Icons.home_outlined,
@@ -134,6 +142,8 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
+
+                    // Lock screen button
                     _WallpaperButton(
                       label: 'Set Lock Screen',
                       icon: Icons.lock_outline,
@@ -143,6 +153,8 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
+
+                    // Both screens - the main demo button
                     _WallpaperButton(
                       label: 'Set Both Screens',
                       icon: Icons.smartphone,
@@ -163,6 +175,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
   }
 }
 
+// Reusable button widget to keep the build method clean
 class _WallpaperButton extends StatelessWidget {
   final String label;
   final IconData icon;

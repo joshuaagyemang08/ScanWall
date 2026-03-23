@@ -10,10 +10,10 @@ class ScanScreen extends StatefulWidget {
 }
 
 class _ScanScreenState extends State<ScanScreen> {
-  // Prevents the scanner firing multiple times on one QR.
+  // Prevents the scanner firing multiple times on one QR
   bool _hasScanned = false;
 
-  // Controls the camera (start, stop, torch).
+  // Controls the camera (start, stop, torch)
   final MobileScannerController _controller = MobileScannerController();
 
   @override
@@ -23,20 +23,25 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   void _onDetect(BarcodeCapture capture) {
+    // If we already scanned, ignore
     if (_hasScanned) return;
 
-    final barcode = capture.barcodes.isNotEmpty ? capture.barcodes.first : null;
+    final barcode = capture.barcodes.firstOrNull;
     final keyword = barcode?.rawValue;
+
+    // Only proceed if we got a non-empty value
     if (keyword == null || keyword.trim().isEmpty) return;
 
     _hasScanned = true;
 
+    // Navigate to gallery with the scanned keyword
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => GalleryScreen(keyword: keyword.trim()),
       ),
     ).then((_) {
+      // Reset when user comes back to scan again
       if (mounted) {
         setState(() => _hasScanned = false);
       }
@@ -50,6 +55,7 @@ class _ScanScreenState extends State<ScanScreen> {
         title: const Text('ScanWall'),
         centerTitle: true,
         actions: [
+          // Torch toggle button
           IconButton(
             icon: const Icon(Icons.flashlight_on),
             onPressed: () => _controller.toggleTorch(),
@@ -58,6 +64,7 @@ class _ScanScreenState extends State<ScanScreen> {
       ),
       body: Column(
         children: [
+          // Instructions for the user
           const Padding(
             padding: EdgeInsets.all(20),
             child: Text(
@@ -66,6 +73,8 @@ class _ScanScreenState extends State<ScanScreen> {
               style: TextStyle(fontSize: 16, color: Colors.white70),
             ),
           ),
+
+          // Camera viewfinder takes up most of the screen
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
@@ -75,6 +84,8 @@ class _ScanScreenState extends State<ScanScreen> {
               ),
             ),
           ),
+
+          // Show what QR codes the class can scan
           const Padding(
             padding: EdgeInsets.all(20),
             child: Text(

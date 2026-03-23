@@ -11,8 +11,12 @@ class GalleryScreen extends StatefulWidget {
 }
 
 class _GalleryScreenState extends State<GalleryScreen> {
+  // The index of the image the user has tapped
   int? _selectedIndex;
 
+  // Generate 12 unique image URLs using the keyword as a seed
+  // Picsum uses the seed to always return the same image for the same seed
+  // so "sunset1", "sunset2" etc. each give a different but consistent image
   late final List<String> _imageUrls = List.generate(
     12,
     (i) => 'https://picsum.photos/seed/${widget.keyword}$i/400/600',
@@ -52,14 +56,17 @@ class _GalleryScreenState extends State<GalleryScreen> {
               style: TextStyle(color: Colors.white60, fontSize: 14),
             ),
           ),
+
+          // Image grid
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+                crossAxisCount: 3, // 3 columns
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
-                childAspectRatio: 0.65,
+                childAspectRatio:
+                    0.65, // portrait ratio, like a phone wallpaper
               ),
               itemCount: _imageUrls.length,
               itemBuilder: (context, index) {
@@ -72,6 +79,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
+                        // Highlight selected image with a purple border
                         color: isSelected
                             ? Colors.deepPurpleAccent
                             : Colors.transparent,
@@ -83,6 +91,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
+                          // The image itself
                           Image.network(
                             _imageUrls[index],
                             fit: BoxFit.cover,
@@ -105,6 +114,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                               ),
                             ),
                           ),
+
+                          // Checkmark overlay when selected
                           if (isSelected)
                             Positioned(
                               top: 6,
@@ -130,6 +141,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
               },
             ),
           ),
+
+          // Confirm button at the bottom
           Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
